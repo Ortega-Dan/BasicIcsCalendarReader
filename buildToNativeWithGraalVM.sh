@@ -1,0 +1,2 @@
+javac BasicICSreader.java
+native-image BasicICSreader

@@ -30,33 +30,44 @@ public class BasicICSreader {
      */
     public static void main(String[] args) throws Exception {
 
+        if (args.length == 0) {
+            System.out.println("Basic ICS Reader");
+            System.out.println(
+                    "Usage: [executable] [icsFilePath] [outputFileDir] [dateFrom (yyyy-mm-dd)] [dateTo (yyyy-mm-dd)] [clientsToFilter (- for no filter)] [exclusiveFilter (default: false)]");
+            return;
+        }
+
         // ********** Setting up variables
 
         // Input file-path in .ics format
-        String inputFilePathString = "/home/danort/Downloads/dan.ortega@ikno.com.co";
+        String inputFilePathString = args[0];
 
         // Output file-path in .csv format
-        String outputDirPathString = "/home/danort/Downloads/salida";
+        String outputDirPathString = args[1];
 
         // Dates from and to-inclusive (meaning from fromDate at 00:00 hours, until
         // toDate at 23:59 hours) in YYYY-MM-DD format
-        String dateFrom = "2021-08-01";
+        String dateFrom = args[2];
 
         // Last inclusive non-ikno report ..
         // String inclusiveDateTo = "2020-06-03";
         // Last inclusive IKNO IknoPlus report !!!!!!!
-        String inclusiveDateTo = "2021-08-31";
-
-        // Set to true if you want to print all clients but the ones in the query ...
-        // ... set to false if you want to print the clients in the query ... (you are
-        // able to set the actual query string in the next variable)
-        boolean excludeClientsInQuery = false;
+        String inclusiveDateTo = args[3];
 
         // ClientsToQuery: Case insensitive String of clients separated by pipes "|"
         // OR AN EMPTY STRING IF LOOKING FOR ALL ACTIVITIES in a time range or span.
         // For example to look for MTI and DATAFILE activities, set it to "mti|DataFile"
         // String clientsToQuery = "ikno|kno|noclient|rv";
-        String clientsToQuery = "";
+        String clientsToQuery = args[4].equals("-") ? "" : args[4];
+
+        // Set to true if you want to print all clients but the ones in the query ...
+        // ... set to false if you want to print the clients in the query
+        boolean excludeClientsInQuery = false;
+
+        try {
+            excludeClientsInQuery = Boolean.parseBoolean(args[5]);
+        } catch (Exception e) {
+        }
 
         //
         // ********** end of variables setting up
@@ -151,8 +162,8 @@ public class BasicICSreader {
                     }
                 }
 
-                // Avoiding lunch hours
-                if (summary.trim().matches("Lunch")) {
+                // Avoiding lunch or ignore hours
+                if (summary.trim().matches("Lunch") || summary.contains("cal.ignore")) {
                     continue;
                 }
 
