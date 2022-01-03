@@ -204,6 +204,10 @@ public class BasicICSreader {
                         clientsMatchedInQuery.add(client);
 
                         BigDecimal minutesLenght = new BigDecimal(startDT.until(endDT, ChronoUnit.MINUTES) + ".0");
+                        // zeroing non-end-time events
+                        if (endDT.isBefore(startDT)) {
+                            minutesLenght = new BigDecimal(0);
+                        }
 
                         BigDecimal hoursLength = minutesLenght.divide(new BigDecimal("60.0"), 2, RoundingMode.HALF_UP);
 
