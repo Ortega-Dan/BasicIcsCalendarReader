@@ -85,7 +85,8 @@ public class BasicICSreader {
         String startTime, endTime, summary, client;
         startTime = endTime = summary = client = "";
 
-        // reference https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html
+        // reference
+        // https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html
         DateTimeFormatter fromZuluFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssX");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
@@ -144,7 +145,11 @@ public class BasicICSreader {
             // Setting startTime, endTime, client, and summary variables
             if (line.trim().matches("BEGIN:VEVENT")) {
 
+                StringBuilder allEventLines = new StringBuilder();
+
                 while ((line = br.readLine()) != null && !line.trim().equalsIgnoreCase("END:VEVENT")) {
+
+                    allEventLines.append(line + "\n");
 
                     if (line.trim().matches("DTSTART.*:.+")) {
                         line = line.replaceFirst("DTSTART.*:", "");
@@ -185,7 +190,8 @@ public class BasicICSreader {
 
                 ZonedDateTime startDT = null;
                 if (startTime.contains("Z")) {
-                    startDT = ZonedDateTime.parse(startTime, fromZuluFormatter).withZoneSameInstant(ZoneId.systemDefault());
+                    startDT = ZonedDateTime.parse(startTime, fromZuluFormatter)
+                            .withZoneSameInstant(ZoneId.systemDefault());
                 } else {
                     startDT = LocalDateTime.parse(startTime, dateTimeFormatter).atZone(ZoneId.systemDefault());
                 }
@@ -200,6 +206,11 @@ public class BasicICSreader {
                 // Checking if date is in the range
                 if ((startDT.isEqual(startRangeDT) || startDT.isAfter(startRangeDT))
                         && (startDT.isBefore(endRangeDT) || startDT.isEqual(endRangeDT))) {
+
+                    // Uncomment next line for stdout insight
+                    // if (summary.contains("ChangeThisSomething")) {
+                    // System.out.println(allEventLines.toString()+"\n************************************************\n");
+                    // }
 
                     // Full days activities are only displayed and ignored after being filtered
                     if (isFullDayEvent) {
