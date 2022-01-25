@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 // import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -83,6 +85,8 @@ public class BasicICSreader {
         String startTime, endTime, summary, client;
         startTime = endTime = summary = client = "";
 
+        // reference https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html
+        DateTimeFormatter fromZuluFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssX");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
         HashSet<String> allClientsInRange = new HashSet<>();
@@ -103,8 +107,11 @@ public class BasicICSreader {
         BufferedWriter writer = new BufferedWriter(fw);
 
         // Getting from and to RANGE dates ready
-        LocalDateTime startRangeDT = LocalDateTime.parse(dateFrom.replace("-", "") + "T000000", dateTimeFormatter);
-        LocalDateTime endRangeDT = LocalDateTime.parse(inclusiveDateTo.replace("-", "") + "T235959", dateTimeFormatter);
+        ZonedDateTime startRangeDT = LocalDateTime.parse(dateFrom.replace("-", "") + "T000000", dateTimeFormatter)
+                .atZone(ZoneId.systemDefault());
+
+        ZonedDateTime endRangeDT = LocalDateTime.parse(inclusiveDateTo.replace("-", "") + "T235959", dateTimeFormatter)
+                .atZone(ZoneId.systemDefault());
 
         BigDecimal totalHours = new BigDecimal("0");
 
@@ -176,9 +183,19 @@ public class BasicICSreader {
                     isFullDayEvent = true;
                 }
 
-                // Parsing start and end time of the activity to count hours later
-                LocalDateTime startDT = LocalDateTime.parse(startTime.replaceAll("Z", ""), dateTimeFormatter);
-                LocalDateTime endDT = LocalDateTime.parse(endTime.replaceAll("Z", ""), dateTimeFormatter);
+                ZonedDateTime startDT = null;
+                if (startTime.contains("Z")) {
+                    startDT = ZonedDateTime.parse(startTime, fromZuluFormatter).withZoneSameInstant(ZoneId.systemDefault());
+                } else {
+                    startDT = LocalDateTime.parse(startTime, dateTimeFormatter).atZone(ZoneId.systemDefault());
+                }
+
+                ZonedDateTime endDT = null;
+                if (endTime.contains("Z")) {
+                    endDT = ZonedDateTime.parse(endTime, fromZuluFormatter).withZoneSameInstant(ZoneId.systemDefault());
+                } else {
+                    endDT = LocalDateTime.parse(endTime, dateTimeFormatter).atZone(ZoneId.systemDefault());
+                }
 
                 // Checking if date is in the range
                 if ((startDT.isEqual(startRangeDT) || startDT.isAfter(startRangeDT))
