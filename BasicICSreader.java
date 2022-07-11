@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +37,10 @@ public class BasicICSreader {
             System.out.println("Basic ICS Reader");
             System.out.println(
                     "Usage: [executable] [icsFilePath] [outputFileDir] [dateFrom (yyyy-mm-dd)] [dateTo (yyyy-mm-dd)] [clientsToFilter (- for no filter)] [exclusiveFilter (default: false)]");
+
+            Scanner scan = new Scanner(System.in);
+            scan.nextLine();
+            scan.close();
             return;
         }
 
