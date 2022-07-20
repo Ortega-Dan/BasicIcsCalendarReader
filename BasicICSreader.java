@@ -20,17 +20,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * AdvancedReader for iCalendar 2.0 specification
+ * Reader for iCalendar 2.0 specification
  * 
  * @author Dan Ortega
  */
 public class BasicICSreader {
 
-    /**
-     * Modify the first 6 lines of code in this script to set the input and output
-     * files, the dates range, define if the clients-query is inclusive or
-     * exclusive, and set the clients for the query.
-     */
     public static void main(String[] args) throws Exception {
 
         if (args.length == 0) {
@@ -55,16 +50,11 @@ public class BasicICSreader {
         // Dates from and to-inclusive (meaning from fromDate at 00:00 hours, until
         // toDate at 23:59 hours) in YYYY-MM-DD format
         String dateFrom = args[2];
-
-        // Last inclusive non-ikno report ..
-        // String inclusiveDateTo = "2020-06-03";
-        // Last inclusive IKNO IknoPlus report !!!!!!!
         String inclusiveDateTo = args[3];
 
         // ClientsToQuery: Case insensitive String of clients separated by pipes "|"
         // OR AN EMPTY STRING IF LOOKING FOR ALL ACTIVITIES in a time range or span.
         // For example to look for MTI and DATAFILE activities, set it to "mti|DataFile"
-        // String clientsToQuery = "ikno|kno|noclient|rv";
         String clientsToQuery = args[4].equals("-") ? "" : args[4];
 
         // Set to true if you want to print all clients but the ones in the query ...
@@ -83,12 +73,13 @@ public class BasicICSreader {
         //
         // Logic goes from here ...
         Pattern clientFinderPattern = Pattern.compile("([^:]+):.+");
+        Pattern projectFinderPattern = Pattern.compile("^([^,\\s]+),.+");
 
         FileReader fr = new FileReader(inputFilePathString);
         BufferedReader br = new BufferedReader(fr);
 
-        String startTime, endTime, summary, client;
-        startTime = endTime = summary = client = "";
+        String startTime, endTime, summary, client, project;
+        startTime = endTime = summary = client = project = "";
 
         // reference
         // https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html
@@ -121,7 +112,7 @@ public class BasicICSreader {
 
         BigDecimal totalHours = new BigDecimal("0");
 
-        writer.write("Fecha\tHoras\tCliente\tDescripción");
+        writer.write("Date\tHours\tClient\tProject\tDescription");
 
         String line = "";
         while ((line = br.readLine()) != null) {
@@ -169,10 +160,19 @@ public class BasicICSreader {
                         }
                         summary = summary.replaceFirst("SUMMARY:", "").replaceAll("\\\\,", ",");
 
+                        project = "";
                         // Getting the client out of the summary
                         Matcher clientMatcher = clientFinderPattern.matcher(summary);
                         if (clientMatcher.find()) {
                             client = clientMatcher.group(1).trim();
+                            summary = summary.replaceFirst(".*" + client + "\\s*:", "").trim();
+
+                            Matcher projectMatcher = projectFinderPattern.matcher(summary);
+                            if (projectMatcher.find()) {
+                                project = projectMatcher.group(1);
+                                summary = summary.replaceFirst(project + ",", "").trim();
+                            }
+
                         } else {
                             client = "NoClient";
                         }
@@ -246,10 +246,9 @@ public class BasicICSreader {
 
                         totalHours = totalHours.add(hoursLength);
 
-                        // Clean client from summary before writing
-                        summary = summary.replaceFirst(client + ":", "").trim();
                         writer.write(
-                                "\n" + startDT.toLocalDate() + "\t" + hoursLength + "\t" + client + "\t" + summary);
+                                "\n" + startDT.toLocalDate() + "\t" + hoursLength + "\t" + client + "\t:" + project
+                                        + ":\t" + summary);
                     }
                 }
             }
