@@ -1,2 +1,3 @@
 javac BasicICSreader.java
-native-image BasicICSreader
+jar -cvfe icsreader.jar BasicICSreader BasicICSreader.class
+native-image -jar icsreader.jar

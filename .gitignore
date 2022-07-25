@@ -1,4 +1,7 @@
 **@**
 basicicsreader*
+icsreader*
+!icsreader.sh
 *.class
 *_*_*.tsv
+*.jar
