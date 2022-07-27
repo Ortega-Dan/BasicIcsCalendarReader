@@ -31,23 +31,22 @@ func main() {
 
 	var maxQuarters int16 = 0
 
+	regex, _ := regexp.Compile(`^\d{4}-\d{2}-\d{2}.+`)
+
 	line, rerr := lreader()
 	for rerr == nil {
 
-		lineWithTask, err := regexp.MatchString("^\\d{4}-\\d{2}-\\d{2}.+", line)
-		if err != nil {
-			panic("Error in regex comparison")
-		}
+		// lineWithTask, err := regexp.MatchString(, line)
 
-		if lineWithTask {
-			splitted := strings.Split(line, "\t")
-			hrs, err := strconv.ParseFloat(splitted[1], 64)
+		if regex.MatchString(line) {
+			split := strings.Split(line, "\t")
+			hrs, err := strconv.ParseFloat(split[1], 64)
 			if err != nil {
 				panic("Error parsing hours")
 			}
 
 			q := int16(hrs / 0.25)
-			t := strings.Join(splitted[1:], "\t")
+			t := strings.Join(split[1:], "\t")
 			lines = append(lines, pair{q, t})
 
 			if q > maxQuarters {
