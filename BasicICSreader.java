@@ -32,7 +32,7 @@ public class BasicICSreader {
             System.out.println(
                     "Usage:\n\n" +
                             "Dates must be in the format: YYYY-MM-DD\n\n" +
-                            "Usage arguments: [icsFilePath] [date or dateFrom-inclusiveDateTo] [clientsToFilter separated by pipes \"|\" (default: no filter or \"-\")] [boolean isExclusiveFilter (default: false)] [outputPath (default: current dir)]\n\n"
+                            "Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilter separated by pipes \"|\" (default: no filter or \"-\")] [boolean isExclusiveFilter (default: false)] [outputPath (default: current dir)]\n\n"
                             +
                             "(To provide a given optional argument [the ones with default values] you must provide all previous optional arguments)");
             return;
@@ -45,7 +45,7 @@ public class BasicICSreader {
 
         // Dates from and to-inclusive (meaning from fromDate at 00:00 hours, until
         // toDate at 23:59 hours) in YYYY-MM-DD format
-        Matcher datesMatcher = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(-\\d{4}-\\d{2}-\\d{2})?$").matcher(args[1]);
+        Matcher datesMatcher = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(_\\d{4}-\\d{2}-\\d{2})?$").matcher(args[1]);
         datesMatcher.find();
         String dateFrom = datesMatcher.group(1);
         String inclusiveDateTo = dateFrom;
