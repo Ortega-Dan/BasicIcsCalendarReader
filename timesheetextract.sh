@@ -9,5 +9,6 @@ if [ -z "$1" ]; then
 else
     tsvf=$(icsreader $mycalfile $1 noclient true | grep exported | cut -f 4 -d ' ')
     converthourstobars $tsvf
-    open $tsvf
+    xdg-open $tsvf
+    # open $tsvf
 fi
