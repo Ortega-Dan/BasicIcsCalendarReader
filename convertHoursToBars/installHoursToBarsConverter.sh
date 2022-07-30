@@ -1,0 +1,1 @@
+go install -ldflags "-s -w -extldflags=-static" -gcflags=-trimpath=x/y
