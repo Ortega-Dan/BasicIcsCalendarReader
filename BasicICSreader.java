@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,11 +30,11 @@ public class BasicICSreader {
         if (args.length == 0) {
             System.out.println("Basic ICS Reader");
             System.out.println(
-                    "Usage: [executable] [icsFilePath] [outputFileDir] [dateFrom (yyyy-mm-dd)] [dateTo (yyyy-mm-dd)] [clientsToFilter (- for no filter)] [exclusiveFilter (default: false)]");
-
-            Scanner scan = new Scanner(System.in);
-            scan.nextLine();
-            scan.close();
+                    "Usage:\n\n" +
+                            "Dates must be in the format: YYYY-MM-DD\n\n" +
+                            "Usage arguments: [icsFilePath] [date or dateFrom-inclusiveDateTo] [clientsToFilter separated by pipes \"|\" (default: no filter or \"-\")] [boolean isExclusiveFilter (default: false)] [outputPath (default: current dir)]\n\n"
+                            +
+                            "(To provide a given optional argument [the ones with default values] you must provide all previous optional arguments)");
             return;
         }
 
@@ -44,25 +43,34 @@ public class BasicICSreader {
         // Input file-path in .ics format
         String inputFilePathString = args[0];
 
-        // Output file-path in .csv format
-        String outputDirPathString = args[1];
-
         // Dates from and to-inclusive (meaning from fromDate at 00:00 hours, until
         // toDate at 23:59 hours) in YYYY-MM-DD format
-        String dateFrom = args[2];
-        String inclusiveDateTo = args[3];
+        Matcher datesMatcher = Pattern.compile("^(\\d{4}-\\d{2}-\\d{2})(-\\d{4}-\\d{2}-\\d{2})?$").matcher(args[1]);
+        datesMatcher.find();
+        String dateFrom = datesMatcher.group(1);
+        String inclusiveDateTo = dateFrom;
+        try {
+            inclusiveDateTo = datesMatcher.group(2).substring(1);
+        } catch (Exception e) {
+        }
 
         // ClientsToQuery: Case insensitive String of clients separated by pipes "|"
         // OR AN EMPTY STRING IF LOOKING FOR ALL ACTIVITIES in a time range or span.
         // For example to look for MTI and DATAFILE activities, set it to "mti|DataFile"
-        String clientsToQuery = args[4].equals("-") ? "" : args[4];
+        String clientsToQuery = "";
 
         // Set to true if you want to print all clients but the ones in the query ...
         // ... set to false if you want to print the clients in the query
         boolean excludeClientsInQuery = false;
 
+        // Output dir path
+        String outputDirPathString = ".";
+
+        // try to get optional parameters
         try {
-            excludeClientsInQuery = Boolean.parseBoolean(args[5]);
+            clientsToQuery = args[2].equals("-") ? "" : args[2];
+            excludeClientsInQuery = Boolean.parseBoolean(args[3].toLowerCase());
+            outputDirPathString = args[4];
         } catch (Exception e) {
         }
 
@@ -89,9 +97,11 @@ public class BasicICSreader {
         HashSet<String> allClientsInRange = new HashSet<>();
         HashSet<String> clientsMatchedInQuery = new HashSet<>();
 
+        // output file
+        String outFilePath = outputDirPathString + File.separator + inputFilePathString.replaceAll("(.*/|@.+)", "")
+                + "_" + dateFrom + "_" + inclusiveDateTo + ".tsv";
+        File outFile = new File(outFilePath);
         // Creating missing directories if needed
-        File outFile = new File(outputDirPathString + File.separator + inputFilePathString.replaceAll("(.*/|@.+)", "")
-                + "_" + dateFrom + "_" + inclusiveDateTo + ".tsv");
         outFile.getParentFile().mkdirs();
 
         // Writing it for Windows csv:
@@ -265,11 +275,13 @@ public class BasicICSreader {
         if (clientsMatchedInQuery.size() != allClientsInRange.size()) {
             printSortedClients(clientsMatchedInQuery);
         } else {
-            System.out.println("\nAll found clients were included in report.");
+            System.out.println("\nAll found clients were included in report.\n");
         }
 
         System.out.println("\n *** Total Clients found in required dates range: " + allClientsInRange.size() + "\n");
         printSortedClients(allClientsInRange);
+
+        System.out.println("\nFile exported to: " + outFilePath);
 
     }
 
