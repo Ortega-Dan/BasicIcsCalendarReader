@@ -99,7 +99,7 @@ public class BasicICSreader {
 
         // output file
         String outFilePath = outputDirPathString + File.separator + inputFilePathString.replaceAll("(.*/|@.+)", "")
-                + "_" + dateFrom + "_" + inclusiveDateTo + ".tsv";
+                + "_" + (dateFrom.equals(inclusiveDateTo) ? dateFrom : dateFrom + "_" + inclusiveDateTo) + ".tsv";
         File outFile = new File(outFilePath);
         // Creating missing directories if needed
         outFile.getParentFile().mkdirs();
