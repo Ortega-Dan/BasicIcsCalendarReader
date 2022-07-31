@@ -80,8 +80,8 @@ public class BasicICSreader {
 
         //
         // Logic goes from here ...
-        Pattern clientFinderPattern = Pattern.compile("([^:]+):.+");
-        Pattern projectFinderPattern = Pattern.compile("^([^,\\s]+),.+");
+        Pattern clientFinderPattern = Pattern.compile("^(\\w+\\s*):.+");
+        Pattern projectFinderPattern = Pattern.compile("^(\\w+\\s*),.+");
 
         FileReader fr = new FileReader(inputFilePathString);
         BufferedReader br = new BufferedReader(fr);
@@ -168,7 +168,7 @@ public class BasicICSreader {
                         while ((line = br.readLine()) != null && line.matches(" .+")) {
                             summary += line.substring(1);
                         }
-                        summary = summary.replaceFirst("SUMMARY:", "").replaceAll("\\\\,", ",");
+                        summary = summary.replaceFirst("SUMMARY:", "").replaceAll("\\\\,", ",").trim();
 
                         project = "";
                         // Getting the client out of the summary

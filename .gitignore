@@ -5,3 +5,4 @@ icsreader*
 *.class
 *_*_*.tsv
 *.jar
+*.ics
