@@ -9,7 +9,7 @@
             "name": "Launch BasicICSreader",
             "request": "launch",
             "mainClass": "BasicICSreader",
-            "args": "dortega@nuvalence.io.ics 2022-04-19_2022-04-22 theClie true maPath"
+            "args": "now.ics 2022-07-29_2022-07-31"
         }
     ]
 }
