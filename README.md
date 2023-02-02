@@ -8,7 +8,7 @@ To keep that report visually with some shortcuts and time control features from 
 
 ___
 ## Build:
-### To native image (Requires GraalVM with Native Image feature):
+### To native image [Recommended] (Requires GraalVM with Native Image feature):
 ```bash
 ./buildToNativeWithGraalVM.sh
 ```
@@ -21,10 +21,10 @@ jar -cvfe icsreader.jar BasicICSreader BasicICSreader.class
 
 
 ## Install: 
-If native image built, just put it in your path.\
-If regular jar build, put both `icsreader.sh` and `icsreader.jar` in your path.
+If native image built, just put the icsreader or icsreader.exe in your path.\
+If regular jar build, put the `icsreader.sh` in your path (and `icsreader.jar` in the same directory preferably), and adjust the icsreader.sh file in line 3 to point to the full path of your jar.
 
 
 ## Usage:
 Run it without arguments to see usage.\
-Or to simplify usage the included `./timesheetextract.sh` can be added to the path adjusted and used as interface. (It also supports an alternative time-to-bars little visual help about the length of the events. and is found with instruction to build [here](convertHoursToBars/README.md))
+Or to simplify usage, the included `./timesheetextract.sh` can be added to the path (adjusted in line 5) and used as interface. (It also supports an alternative time-to-bars quick visual help about the length of the events. Which is found with instruction to build [here](convertHoursToBars/README.md))
