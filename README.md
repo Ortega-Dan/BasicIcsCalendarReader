@@ -32,7 +32,7 @@ To simplify usage, the included `./timesheetextract.sh` can be added to the path
 ___
 
 # Prebuilt binaries:
-Are provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars/README.md)) in releases for:
+Provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars/README.md)) in releases for:
 - Intel-Mac (amd64) (icsreader.jar instead of native built)
 - M1-Mac (arm64)
 - Linux (amd64)
