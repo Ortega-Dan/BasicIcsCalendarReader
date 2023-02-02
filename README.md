@@ -36,5 +36,4 @@ Provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars
 - Linux (amd64)
 - M1-Mac (arm64)
 - Intel-Mac (amd64) (icsreader.jar instead of native built)
-- Windows (amd64)
-Windows binaries are provided, but the scripts in this instructions may need minor adjustments there.
+- Windows (amd64) (Windows binaries are provided, but if the scripts in this instructions are needed, those may need minor adjustments)
