@@ -4,7 +4,7 @@ Extracts a .tsv (.csv like) report of hours (to open in Excel or other spreadshe
 
 When the events are prefixed with the `"CLIENT: Project, "` format, this generates the proper report of hours with columns for those classifications. 
 
-To keep that report visually with some shortcuts and time control features from a Google Calendar, it is recommended to use [CalendarWorkHoursCounter](https://github.com/Ortega-Dan/CalendarWorkHoursCounter)
+To keep that report visually with some shortcuts and time control features from a Google Calendar, it is recommended to use [CalendarWorkHoursCounter](https://github.com/Ortega-Dan/CalendarWorkHoursCounter). You can export the .ics file from your Google Calendar from Google Calendar settings [like this](img/exportFromGcal.png).
 
 ___
 Instructions are given for bash shell, but equivalent scripts are here with the .cmd file extension for Windows.

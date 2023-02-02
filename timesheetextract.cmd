@@ -2,7 +2,7 @@
 REM custom runner helper
 
 REM replace with your common calendar ICS file
-set mycalfile=ortega.dan2010@gmail.com.ics
+set mycalfile=your.email@address.com.ics
 REM or use an env variable
 REM mycalfile=$mycal
 
