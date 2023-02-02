@@ -26,14 +26,15 @@ jar -cvfe icsreader.jar BasicICSreader BasicICSreader.class
 
 
 ## Usage:
-Run it without arguments to see usage.\
+Run `ìcsreader` without arguments to see usage.\
 To simplify usage, the included `./timesheetextract.sh` can be added to the path (adjusted in line 5) and used as interface. (It also supports an alternative time-to-bars quick visual help about the length of the events. Which is found with instruction to build [here](convertHoursToBars/README.md))
 
 ___
 
 # Prebuilt binaries:
-Provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars/README.md)) in releases for:
-- Intel-Mac (amd64) (icsreader.jar instead of native built)
-- M1-Mac (arm64)
+Provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars/README.md)) in [releases](https://github.com/Ortega-Dan/BasicIcsCalendarReader/releases) for:
 - Linux (amd64)
-- Windows (amd64) (even when documented scripts may need minor adjustments for Windows)
+- M1-Mac (arm64)
+- Intel-Mac (amd64) (icsreader.jar instead of native built)
+- Windows (amd64)
+Windows binaries are provided, but the scripts in this instructions may need minor adjustments there.
