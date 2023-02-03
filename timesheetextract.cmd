@@ -12,5 +12,6 @@ echo Provide the date or dates range as YYYY-MM-DD or YYYY-MM-DD_YYYY-MM-DD in a
 icsreader %mycalfile% %1 noclient true
 
 REM NOTE: this doesn't support triggering converthourstobars yet
+REM you may run it manually after installing with: converthourstobars the-tsv-output-file.tsv
 
 )

@@ -21,8 +21,8 @@ jar -cvfe icsreader.jar BasicICSreader BasicICSreader.class
 
 
 ## Install: 
-- If native-image built, just put the built `icsreader` in your path.
-- If regular jar built, put the `icsreader.sh` in your path, remove the .sh extension (also put the `icsreader.jar` in the same directory preferably), and adjust the `icsreader` shell file in line 3 to point to the full path of the jar.
+- For native-image built, just put the built `icsreader` in your path.
+- If regular jar built, put the `icsreader.sh` in your path, remove the .sh extension for Linux or macOS (but do not remove the .cmd extension for Windows), also put the `icsreader.jar` in the same directory preferably, and adjust the `icsreader` script file in line 3 to point to the full path of the jar.
 
 
 ## Usage:
@@ -36,4 +36,4 @@ Provided for both `icsreader` and `converthourstobars` ([ref](convertHoursToBars
 - Linux (amd64)
 - M1-Mac (arm64)
 - Intel-Mac (amd64) (icsreader.jar instead of native built)
-- Windows (amd64) (Windows binaries are provided, but if the scripts in this instructions are needed, those may need minor adjustments)
+- Windows (amd64)
