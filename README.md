@@ -7,6 +7,8 @@ When the events are prefixed with the `"CLIENT: Project, "` format, this generat
 To keep that report visually with some shortcuts and time control features from a Google Calendar, it is recommended to use [CalendarWorkHoursCounter](https://github.com/Ortega-Dan/CalendarWorkHoursCounter)
 
 ___
+Instructions are given for bash shell, but equivalent scripts are here with the .cmd file extension for Windows.
+
 ## Build:
 ### To native image [Recommended] (Requires GraalVM with Native Image feature):
 ```bash
