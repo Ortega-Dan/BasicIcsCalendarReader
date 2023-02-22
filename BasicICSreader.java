@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,7 +96,7 @@ public class BasicICSreader {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
         HashSet<String> allClientsInRange = new HashSet<>();
-        HashSet<String> clientsMatchedInQuery = new HashSet<>();
+        TreeMap<String, BigDecimal> reportClientsToHours = new TreeMap<>();
 
         // output file
         String outFilePath = outputDirPathString + File.separator + inputFilePathString.replaceAll("(.*/|@.+)", "")
@@ -243,9 +244,6 @@ public class BasicICSreader {
                     // match and query is exclusive
                     if ((isClientMatching && !excludeClientsInQuery) || (!isClientMatching && excludeClientsInQuery)) {
 
-                        // Recording filtered clients to show them later
-                        clientsMatchedInQuery.add(client);
-
                         BigDecimal minutesLenght = new BigDecimal(startDT.until(endDT, ChronoUnit.MINUTES) + ".0");
                         // zeroing non-end-time events
                         if (endDT.isBefore(startDT)) {
@@ -255,6 +253,9 @@ public class BasicICSreader {
                         BigDecimal hoursLength = minutesLenght.divide(new BigDecimal("60.0"), 2, RoundingMode.HALF_UP);
 
                         totalHours = totalHours.add(hoursLength);
+
+                        // Recording filtered clients to show them later
+                        reportClientsToHours.compute(client, (k, v) -> v == null ? hoursLength : v.add(hoursLength));
 
                         writer.write(
                                 "\n" + startDT.toLocalDate() + "\t" + hoursLength + "\t" + client + "\t:" + project
@@ -271,9 +272,10 @@ public class BasicICSreader {
         writer.close();
         br.close();
 
-        System.out.println("\n *** Clients included in report: " + clientsMatchedInQuery.size());
-        if (clientsMatchedInQuery.size() != allClientsInRange.size()) {
-            printSortedClients(clientsMatchedInQuery);
+        System.out.println("\n *** Clients included in report: " + reportClientsToHours.size());
+        if (reportClientsToHours.size() != allClientsInRange.size()) {
+            printSortedClientsAndHours(reportClientsToHours);
+            System.out.println("\nTotal: " + totalHours + " hrs");
         } else {
             System.out.println("\nAll found clients were included in report.\n");
         }
@@ -292,6 +294,14 @@ public class BasicICSreader {
         Collections.sort(clientsList);
 
         clientsList.forEach(System.out::println);
+
+    }
+
+    private static void printSortedClientsAndHours(TreeMap<String, BigDecimal> clients) {
+
+        for (String client : clients.keySet()) {
+            System.out.println(client + " -> " + clients.get(client) + " hrs");
+        }
 
     }
 
