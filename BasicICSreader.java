@@ -95,7 +95,7 @@ public class BasicICSreader {
         DateTimeFormatter fromZuluFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmssX");
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss");
 
-        HashSet<String> allClientsInRange = new HashSet<>();
+        HashSet<String> otherClientsInRange = new HashSet<>();
         TreeMap<String, BigDecimal> reportClientsToHours = new TreeMap<>();
 
         // output file
@@ -235,9 +235,6 @@ public class BasicICSreader {
                         continue;
                     }
 
-                    // Adding all clients in the dates-range for later information to the user
-                    allClientsInRange.add(client);
-
                     // CLIENT FILTERING (case insensitive matching)
                     boolean isClientMatching = client.matches("(?i)(" + clientsToQuery + ").*");
                     // if client is match and query is inclusive **** OR **** if client doesn't
@@ -260,6 +257,9 @@ public class BasicICSreader {
                         writer.write(
                                 "\n" + startDT.toLocalDate() + "\t" + hoursLength + "\t" + client + "\t:" + project
                                         + ":\t" + summary);
+                    } else {
+                        // Adding other clients in the dates-range for later information to the user
+                        otherClientsInRange.add(client);
                     }
                 }
             }
@@ -273,15 +273,19 @@ public class BasicICSreader {
         br.close();
 
         System.out.println("\n *** Clients included in report: " + reportClientsToHours.size());
-        if (reportClientsToHours.size() != allClientsInRange.size()) {
+        if (reportClientsToHours.size() != otherClientsInRange.size()) {
             printSortedClientsAndHours(reportClientsToHours);
             System.out.println("\nTotal: " + totalHours + " hrs");
+
+            System.out
+                    .println("\n *** Other clients found in required dates range: "
+                            + otherClientsInRange.size() + "\n");
+
+            printSortedClients(otherClientsInRange);
+
         } else {
             System.out.println("\nAll found clients were included in report.\n");
         }
-
-        System.out.println("\n *** Total Clients found in required dates range: " + allClientsInRange.size() + "\n");
-        printSortedClients(allClientsInRange);
 
         System.out.println("\nFile exported to: " + outFilePath);
 
