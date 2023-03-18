@@ -1,0 +1,13 @@
+# github.com/Ortega-Dan/golang-stdin v1.2.1
+## explicit; go 1.11
+github.com/Ortega-Dan/golang-stdin/stdin
+# github.com/emirpasic/gods v1.18.1
+## explicit; go 1.2
+github.com/emirpasic/gods/containers
+github.com/emirpasic/gods/maps
+github.com/emirpasic/gods/maps/treemap
+github.com/emirpasic/gods/sets
+github.com/emirpasic/gods/sets/treeset
+github.com/emirpasic/gods/trees
+github.com/emirpasic/gods/trees/redblacktree
+github.com/emirpasic/gods/utils
