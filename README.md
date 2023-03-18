@@ -1,6 +1,6 @@
 # BasicIcsCalendarReader
 
-(This is latest version written in Golang and previous version was moved to [legacyJava](legacyJava))
+(This is latest version written in **Golang** and previous version was moved to [legacy](legacy))
 ___
 
 This command-line app extracts a .tsv (.csv like) report of hours (to open in Excel or other spreadsheet software) from an .ics calendar file.
