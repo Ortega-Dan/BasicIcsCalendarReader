@@ -29,5 +29,5 @@ jar -cvfe icsreader.jar BasicICSreader BasicICSreader.class
 
 ## Usage:
 Run `ìcsreader` without arguments to see usage.\
-To simplify usage, the included `./timesheetextract.sh` can be added to the path (adjusted in line 5) and used as interface. (It also supports an alternative time-to-bars quick visual help about the length of the events. Which is found with instruction to build [here](convertHoursToBars))
+To simplify usage, the included `./timesheetextract.sh` can be added to the path (adjusted in line 5) and used as interface. (It also supports an alternative time-to-bars quick visual help about the length of the events. Which is found with instruction to build [here](../convertHoursToBars))
 
