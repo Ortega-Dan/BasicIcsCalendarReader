@@ -280,7 +280,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 		printSortedClients(otherClientsInRange)
 
 	} else {
-		fmt.Println("\nAll found clients were included in report.\n")
+		fmt.Print("\nAll found clients were included in report.\n\n")
 	}
 
 	fmt.Println("\nFile exported to: " + outFilePath)
