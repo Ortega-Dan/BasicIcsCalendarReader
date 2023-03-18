@@ -1,0 +1,9 @@
+**@**
+basicicsreader*
+icsreader*
+!icsreader.sh
+!icsreader.cmd
+*.class
+*_*_*.tsv
+*.jar
+*.ics

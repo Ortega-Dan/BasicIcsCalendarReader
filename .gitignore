@@ -7,3 +7,12 @@ icsreader*
 *_*_*.tsv
 *.jar
 *.ics
+
+
+# go
+exampleInputs/*
+!exampleInputs/.placeholder
+test*
+__debug_bin
+icsreader
+icsreader.exe
