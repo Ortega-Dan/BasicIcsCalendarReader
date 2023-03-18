@@ -13,7 +13,7 @@ ___
 Instructions are given for bash shell, but equivalent scripts are here with the .cmd file extension for Windows.
 
 ## To build or install from source:
-Requires Golang installed locally:
+Requires Golang 1.18+ installed locally:
 ```bash
 # build with
 go build
