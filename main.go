@@ -160,7 +160,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 					endTime = strings.TrimSpace(timeEndMatcher.ReplaceAllString(line, ""))
 				} else if strings.HasPrefix(line, "SUMMARY:") {
 
-					if strings.Contains(line,"NO COMPUTER DAY. trying to fix") {
+					if strings.Contains(line, "NO COMPUTER DAY. trying to fix") {
 						println("here")
 					}
 
