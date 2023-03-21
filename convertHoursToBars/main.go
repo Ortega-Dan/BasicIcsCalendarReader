@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"regexp"
@@ -64,11 +65,11 @@ func main() {
 	for _, l := range lines {
 		i := 0
 		for ; i < int(l.quarters); i++ {
-			print("|")
+			fmt.Print("|")
 		}
 		for ; i < int(maxQuarters); i++ {
-			print(" ")
+			fmt.Print(" ")
 		}
-		println("\t" + l.text)
+		fmt.Println("\t" + l.text)
 	}
 }
