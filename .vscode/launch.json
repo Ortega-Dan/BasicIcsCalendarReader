@@ -9,8 +9,11 @@
             "program": "${workspaceFolder}",
             "internalConsoleOptions": "neverOpen",
             "console": "integratedTerminal",
-            // "args": ["exampleInputs/tester.ics", "2017-08-19_2023-09-16", "test|noclient|gfjkds", "true"]
-            "args": ["exampleInputs/tester.ics", "2017-08-19_2023-09-16"]
+            "args": ["exampleInputs/tester.ics", "2023-01-19_2023-09-16", "noclient", "true"]
+            // "args": ["exampleInputs/tester.ics", "2023-01-19_2023-09-16", "noclient"]
+            // "args": ["exampleInputs/tester.ics", "2023-01-19_2023-09-16","fdsafdsfdsafds"]
+            // "args": ["exampleInputs/tester.ics", "2023-01-19_2023-09-16"]
+            // "args": ["exampleInputs/tester.ics", "2003-01-19_2003-09-16"]
         }
     ]
 }

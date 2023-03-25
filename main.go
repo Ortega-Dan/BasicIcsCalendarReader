@@ -115,6 +115,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	otherClientsInRange := treeset.NewWithStringComparator()
 
 	var totalHours time.Duration
+	var totalCount int64
 
 	writer.WriteString("Date\tHours\tClient\tProject\tDescription")
 
@@ -238,6 +239,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 						duration := endDT.Sub(startDT)
 
 						totalHours += duration
+						totalCount += 1
 
 						// Recording filtered clients to show them later
 						previousDuration, found := reportClientsToHours.Get(client)
@@ -265,21 +267,30 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	// Writing last line with total hours
 	writer.WriteString("\n\t" + fmt.Sprintf("%.2f", totalHours.Hours()) + "\tTOTAL\t")
 
-	fmt.Println("\n *** Clients included in report: " + strconv.Itoa(reportClientsToHours.Size()))
+	fmt.Println("\n *** Clients included in report: " + strconv.Itoa(reportClientsToHours.Size()) + "\n")
+	printSortedClientsAndHours(reportClientsToHours)
 
-	if reportClientsToHours.Size() != otherClientsInRange.Size() {
-		printSortedClientsAndHours(reportClientsToHours)
-		fmt.Println("\nTotal: " + fmt.Sprintf("%.2f", totalHours.Hours()) + " hrs")
+	eventsString := "events"
+	if totalCount == 1 {
+		eventsString = "event"
+	}
+
+	fmt.Println("\nTotal: " + fmt.Sprintf("%.2f", totalHours.Hours()) + " hrs (" + strconv.Itoa(int(totalCount)) + " " + eventsString + ")\n")
+
+	if otherClientsInRange.Size() > 0 {
 
 		fmt.Println("\n *** Other clients found in required dates range: " + strconv.Itoa(otherClientsInRange.Size()) + "\n")
 
 		printSortedClients(otherClientsInRange)
 
+	} else if reportClientsToHours.Size() == 0 {
+		fmt.Print("\nNo clients found for filter and range.\n")
 	} else {
-		fmt.Print("\nAll found clients were included in report.\n\n")
+		fmt.Print("\nAll found clients included in report.\n")
 	}
 
-	fmt.Println("\nFile exported to: " + outFilePath)
+	// the wording of this line is used by timesheetextract.sh
+	fmt.Print("\n\nFile exported to: " + outFilePath + "\n\n")
 
 }
 
@@ -295,6 +306,6 @@ func printSortedClientsAndHours(reportClientsToHours *treemap.Map) {
 
 	it := reportClientsToHours.Iterator()
 	for it.Begin(); it.Next(); {
-		fmt.Println(it.Key().(string) + " -> " + fmt.Sprintf("%.2f", it.Value().(time.Duration).Hours()) + " hrs")
+		fmt.Println(it.Key().(string) + ": " + fmt.Sprintf("%.2f", it.Value().(time.Duration).Hours()) + " hrs")
 	}
 }
