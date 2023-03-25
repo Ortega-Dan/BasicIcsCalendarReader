@@ -267,15 +267,16 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	// Writing last line with total hours
 	writer.WriteString("\n\t" + fmt.Sprintf("%.2f", totalHours.Hours()) + "\tTOTAL\t")
 
-	fmt.Println("\n *** Clients included in report: " + strconv.Itoa(reportClientsToHours.Size()) + "\n")
+	eventsWord := "events"
+	if totalCount == 1 {
+		eventsWord = "event"
+	}
+	eventsString := " (" + strconv.Itoa(int(totalCount)) + " " + eventsWord + ")"
+
+	fmt.Println("\n *** Clients included in report: " + strconv.Itoa(reportClientsToHours.Size()) + eventsString + "\n")
 	printSortedClientsAndHours(reportClientsToHours)
 
-	eventsString := "events"
-	if totalCount == 1 {
-		eventsString = "event"
-	}
-
-	fmt.Println("\nTotal: " + fmt.Sprintf("%.2f", totalHours.Hours()) + " hrs (" + strconv.Itoa(int(totalCount)) + " " + eventsString + ")\n")
+	fmt.Println("\nTotal: " + fmt.Sprintf("%.2f", totalHours.Hours()) + " hrs\n")
 
 	if otherClientsInRange.Size() > 0 {
 
