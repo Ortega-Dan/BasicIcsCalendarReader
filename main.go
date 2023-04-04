@@ -28,7 +28,7 @@ func main() {
 		
 Dates must be in the format: YYYY-MM-DD
 		
-Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilter separated by pipes "|" (default: no filter)] [boolean isExclusiveFilter (default: false)]
+Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilter separated by pipes "|" (default: no filter)] [boolean isInclusiveFilter (default: true)]
 		
 		`)
 		return
@@ -75,15 +75,15 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	// For example to look for MTI and DATAFILE activities, set it to "mti|DataFile"
 	clientsToQuery := ""
 
-	// Set to true if you want to print all clients but the ones in the query ...
-	// ... set to false if you want to print the clients in the query
-	excludeClientsInQuery := false
+	// Set to false if you want to print all clients but the ones in the query ...
+	// ... set to true if you want to print the clients in the query
+	includeClientsInQuery := true
 
 	if len(os.Args) > 3 {
 		clientsToQuery = os.Args[3]
 	}
 	if len(os.Args) > 4 {
-		excludeClientsInQuery, _ = strconv.ParseBool(os.Args[4])
+		includeClientsInQuery, _ = strconv.ParseBool(os.Args[4])
 	}
 	// ********** end of variables setting up
 	//
@@ -228,7 +228,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 
 				// if client matches and query is inclusive **** OR **** if client doesn't
 				// match and query is exclusive
-				if (isClientMatching && !excludeClientsInQuery) || (!isClientMatching && excludeClientsInQuery) {
+				if (isClientMatching && includeClientsInQuery) || (!isClientMatching && !includeClientsInQuery) {
 					if startDT.Before(endDT) {
 						duration := endDT.Sub(startDT)
 
