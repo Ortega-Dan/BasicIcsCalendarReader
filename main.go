@@ -244,7 +244,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 						}
 
 						// creating output line
-						outLine := "\n" + strings.Split(startDT.String(), " ")[0] + "\t" + fmt.Sprintf("%.2f", duration.Hours()) + "\t" + client + "\t" + project + "\t" + summary
+						outLine := "\n" + strings.Split(startDT.String(), " ")[0] + "\t" + fmt.Sprintf("%.2f", duration.Hours()) + "\t" + client + "\t:" + project + ":\t" + summary
 
 						sorterKey := startTime
 						_, eventFound := sortedReportEvents.Get(sorterKey)
