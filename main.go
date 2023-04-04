@@ -104,20 +104,14 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	}
 
 	outFilePath := "." + string(os.PathSeparator) + regexp.MustCompile(`(.*/|.*\\|@.+)`).ReplaceAllString(inputFileBaseName, "") + "_" + dates + ".tsv"
-	// creating output writer
-	writer, err := os.Create(outFilePath)
-	if err != nil {
-		panic("Unable to create output file :" + outFilePath)
-	}
-	defer writer.Close()
 
 	reportClientsToHours := treemap.NewWithStringComparator()
 	otherClientsInRange := treeset.NewWithStringComparator()
 
+	sortedReportEvents := treemap.NewWithStringComparator()
+
 	var totalHours time.Duration
 	var totalCount int64
-
-	writer.WriteString("Date\tHours\tClient\tProject\tDescription")
 
 	var line string
 	var readingError error
@@ -249,7 +243,18 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 							reportClientsToHours.Put(client, duration)
 						}
 
-						writer.WriteString("\n" + strings.Split(startDT.String(), " ")[0] + "\t" + fmt.Sprintf("%.2f", duration.Hours()) + "\t" + client + "\t" + project + "\t" + summary)
+						// creating output line
+						outLine := "\n" + strings.Split(startDT.String(), " ")[0] + "\t" + fmt.Sprintf("%.2f", duration.Hours()) + "\t" + client + "\t" + project + "\t" + summary
+
+						sorterKey := startTime
+						_, eventFound := sortedReportEvents.Get(sorterKey)
+						for eventFound {
+							sorterKey += "i"
+							_, eventFound = sortedReportEvents.Get(sorterKey)
+						}
+
+						sortedReportEvents.Put(sorterKey, outLine)
+
 					}
 				} else {
 					// Adding other clients in the dates-range for later information to the user
@@ -264,8 +269,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	}
 
 	// concluding actions
-	// Writing last line with total hours
-	writer.WriteString("\n\t" + fmt.Sprintf("%.2f", totalHours.Hours()) + "\tTOTAL\t")
+	writeOutputFile(outFilePath, sortedReportEvents, totalHours)
 
 	eventsWord := "events"
 	if totalCount == 1 {
@@ -293,6 +297,25 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	// the wording of this line is used by timesheetextract.sh
 	fmt.Print("\n\nFile exported to: " + outFilePath + "\n\n")
 
+}
+
+func writeOutputFile(outFilePath string, sortedReportEvents *treemap.Map, totalHours time.Duration) {
+	// creating output writer
+	writer, err := os.Create(outFilePath)
+	if err != nil {
+		panic("Unable to create output file :" + outFilePath)
+	}
+	defer writer.Close()
+
+	writer.WriteString("Date\tHours\tClient\tProject\tDescription")
+
+	it := sortedReportEvents.Iterator()
+	for it.Begin(); it.Next(); {
+		writer.WriteString(it.Value().(string))
+	}
+
+	// Writing last line with total hours
+	writer.WriteString("\n\t" + fmt.Sprintf("%.2f", totalHours.Hours()) + "\tTOTAL\t")
 }
 
 func printSortedClients(otherClientsInRange *treeset.Set) {
