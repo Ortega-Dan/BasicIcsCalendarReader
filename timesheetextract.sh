@@ -11,7 +11,7 @@ CAL_ZIPFILE="$CAL_EMAIL.ical.zip"
 if [ -z "$1" ]; then
     echo "Provide the date or dates range as YYYY-MM-DD or YYYY-MM-DD_YYYY-MM-DD in a single argument"
 else
-    unzip -u $CAL_ZIPFILE
+    unzip -o $CAL_ZIPFILE
     # adjust with your prefered default usage
     tsvf=$(icsreader $CAL_FILE $1 noclient false | grep "File exported to" | cut -f 4 -d ' ')
     withbars="$tsvf.withbars.tsv"
