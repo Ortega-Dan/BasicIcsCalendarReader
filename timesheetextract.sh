@@ -11,10 +11,11 @@ if [ -z "$1" ]; then
 else
     # adjust with your prefered default usage
     tsvf=$(icsreader $MYCALFILE $1 noclient false | grep "File exported to" | cut -f 4 -d ' ')
-    converthourstobars $tsvf
+    withbars="$tsvf.withbars.tsv"
+    converthourstobars $tsvf > $withbars
     # open with default application
     # on linux
-    xdg-open $tsvf
+    xdg-open $withbars
     # on mac
-    # open $tsvf
+    # open $withbars
 fi
