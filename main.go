@@ -93,6 +93,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 	clientFinderMatcher := regexp.MustCompile(`^(\w+\s*):.+`)
 	projectFinderMatcher := regexp.MustCompile(`^(\w+\s*),.+`)
 	clientsToQueryMatcher := regexp.MustCompile("(?i)(" + clientsToQuery + ").*")
+	recordIgnoreShortcutMatcher := regexp.MustCompile(`\b(?i)(cal.ignore|c.ig)\b`)
 
 	timeStartMatcher := regexp.MustCompile("DTSTART.*:")
 	timeEndMatcher := regexp.MustCompile("DTEND.*:")
@@ -194,7 +195,7 @@ Usage arguments: [icsFilePath] [date or dateFrom_inclusiveDateTo] [clientsToFilt
 
 			// working with event data
 			// Avoiding lunch or ignore-hours
-			if strings.EqualFold(summary, "lunch") || strings.Contains(summary, "cal.ignore") {
+			if strings.EqualFold(summary, "lunch") || recordIgnoreShortcutMatcher.MatchString(summary) {
 				continue
 			}
 
